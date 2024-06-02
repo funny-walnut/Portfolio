@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@Core/*": ["src/core/*"],
+      "@Components/*": ["src/components/*"],
+      "@Constants/*": ["src/constants/*"],
+      "@Test": ["src/customTest"],
+      "@Pages/*": ["src/pages/*"],
+      "@Utils/*": ["src/utils/*"]
+    },
+    "strict": true
+  },
+  "include": ["tests", ".eslint.config.mjs", "playwright.config.ts"],
+  "exclude": ["node_modules"]
+}

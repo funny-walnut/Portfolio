@@ -1,0 +1,15 @@
+{
+  "name": "Potfolio",
+  "version": "1.0.0",
+  "repository": "git@github.com:funny-walnut/Potfolio.git",
+  "author": "valeriia zinoveva <leraiztlt@gmail.com>",
+  "devDependencies": {
+    "@playwright/test": "^1.44.1",
+    "@types/node": "^20.13.0",
+    "p-iteration": "^1.1.8"
+  },
+  "scripts": {
+    "pw-run": "playwright test --headed",
+    "test": "yarn pw-run --project=chromium"
+  }
+}
