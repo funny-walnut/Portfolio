@@ -15,6 +15,20 @@ export class LoginFrom extends Component {
 
     public ErrorMessage = new ErrorMessage(this.LOCATORS.errorMessageContainer, this.page);
 
+    private async clickLoginButton(): Promise<void> {
+        await Promise.all([
+            this.LOCATORS.loginButton.click(),
+            this.page.waitForLoadState('domcontentloaded')
+        ])
+    }
+
+    private async pressEnterButton(): Promise<void> {
+        await Promise.all([
+            this.locator.press('Enter'),
+            this.page.waitForLoadState('load'),
+        ]);
+    }
+
     public async fillInputByName(inputName: LoginFormPlaceholders, value: string): Promise<void> {
         await this.LOCATORS.input(inputName).click();
         await this.LOCATORS.input(inputName).fill(value);
@@ -34,18 +48,8 @@ export class LoginFrom extends Component {
         };
     }
 
-    public async clickLoginButton(): Promise<void> {
-        await Promise.all([
-            this.LOCATORS.loginButton.click(),
-            this.page.waitForLoadState('domcontentloaded')
-        ])
-    }
-
-    public async pressButton(buttonName: string): Promise<void> {
-        await Promise.all([
-            this.locator.press(buttonName),
-            this.page.waitForLoadState('load'),
-        ]);
+    public async submit(submitType: 'by Enter' | 'by click' = 'by click'): Promise<void> {
+        submitType === 'by Enter' ? await this.pressEnterButton() : await this.clickLoginButton()
     }
 
     public async isVisibleAllInputs(): Promise<boolean> {

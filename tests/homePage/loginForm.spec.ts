@@ -1,45 +1,40 @@
-import {test, expect} from '@Core/customTest';
+import {expect, test} from '@Core/customTest';
 import {INVENTORY_PAGE} from "@Constants/links";
 import {LoginFormPlaceholders} from "@Components/home/loginFrom";
 import {LOCKED_OUT_USER_DATA, VALID_USER_DATA} from "@Constants/userData";
 
 const LOCKED_OUT_USER_ERROR_MESSAGE = 'Epic sadface: Sorry, this user has been locked out.';
 const CANNOT_ACCESS_USER_ERROR_MESSAGE = 'Epic sadface: You can only access \'/inventory.html\' when you are logged in.';
-const FIELD_IS_REQUIRED = (fieldName: string) => `Epic sadface: ${fieldName} is required`;
+const FIELD_IS_REQUIRED = (fieldName: LoginFormPlaceholders) => `Epic sadface: ${fieldName} is required`;
 
 test.describe('login form testing', () => {
     test.beforeEach(async ({homePage}) => {
         await homePage.open()
     });
 
-    test('login by mouse click', async ({homePage, page, baseURL}) => {
-        const loginForm = homePage.LoginForm;
+    const submitTypesData = ['by Enter', 'by click'] as const;
 
-        expect(await loginForm.isVisible()).toBe(true);
-        expect(await loginForm.isVisibleAllInputs()).toBe(true);
-        expect(await loginForm.isVisibleLoginButton()).toBe(true);
+    for (const submitType of submitTypesData) {
+        test(`Submit log in form ${submitType}`, async ({homePage, page, baseURL}) => {
+            const loginForm = homePage.LoginForm;
 
-        await loginForm.fill();
-        await expect.poll(async () => await loginForm.getItputsContent()).toStrictEqual(VALID_USER_DATA);
-        await loginForm.clickLoginButton();
+            expect(await loginForm.isVisible()).toBe(true);
+            expect(await loginForm.isVisibleAllInputs()).toBe(true);
+            expect(await loginForm.isVisibleLoginButton()).toBe(true);
 
-        await expect.poll(() => page.url()).toStrictEqual(`${baseURL}${INVENTORY_PAGE}`);
-    });
+            await loginForm.fill();
+            await expect.poll(async () => await loginForm.getItputsContent()).toStrictEqual(VALID_USER_DATA);
+            await loginForm.submit(submitType);
 
-    test('login by press Enter', async ({homePage, page, baseURL}) => {
-        const loginForm = homePage.LoginForm;
-
-        await loginForm.fill();
-        await loginForm.pressButton('Enter');
-
-        await expect.poll(() => page.url()).toStrictEqual(`${baseURL}${INVENTORY_PAGE}`);
-    });
+            await expect.poll(() => page.url()).toStrictEqual(`${baseURL}${INVENTORY_PAGE}`);
+        });
+    }
 
     test('Try to log in as locked_out_user', async ({homePage}) => {
         const loginForm = homePage.LoginForm;
 
         await loginForm.fill(LOCKED_OUT_USER_DATA);
-        await loginForm.pressButton('Enter');
+        await loginForm.submit('by Enter');
 
         const errorMessage = loginForm.ErrorMessage;
         expect(await errorMessage.isVisible()).toBe(true);
@@ -54,6 +49,15 @@ test.describe('login form testing', () => {
         const errorMessage = homePage.LoginForm.ErrorMessage;
         expect(await errorMessage.isVisible()).toBe(true);
         expect(await errorMessage.getText()).toStrictEqual(CANNOT_ACCESS_USER_ERROR_MESSAGE);
+    });
+
+    test('Try to submit empty form', async ({homePage}) => {
+        const loginForm = homePage.LoginForm;
+        await loginForm.submit();
+
+        const errorMessage = loginForm.ErrorMessage;
+        expect(await errorMessage.isVisible()).toBe(true);
+        expect(await errorMessage.getText()).toStrictEqual(FIELD_IS_REQUIRED(LoginFormPlaceholders.UserName));
     });
 
     const data = [
@@ -74,7 +78,7 @@ test.describe('login form testing', () => {
             const loginForm = homePage.LoginForm;
 
             await loginForm.fillInputByName(placeholder, value);
-            await loginForm.clickLoginButton();
+            await loginForm.submit();
 
             const errorMessage = homePage.LoginForm.ErrorMessage;
             expect(await errorMessage.isVisible()).toBe(true);
