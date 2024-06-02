@@ -1,5 +1,7 @@
 import {Component} from "@Core/component";
 import {InventoryItem} from "@Components/inventory/inventoryList/inventoryItem";
+import {map} from "p-iteration";
+import {ProductInfo} from "@Types";
 
 export class InventoryList extends Component {
     private LOCATORS = {
@@ -16,5 +18,14 @@ export class InventoryList extends Component {
         const items = await this.getItems();
 
         return items.slice(0, amount);
+    }
+
+    public async getProductsInfo(): Promise<ProductInfo[]> {
+        return await map(await this.getItems(), async item => {
+            return {
+                name: await item.getName(),
+                price: await item.getPrice(),
+            };
+        });
     }
 }
