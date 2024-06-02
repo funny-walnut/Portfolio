@@ -15,7 +15,7 @@ test.describe('Home page', () => {
     const submitTypesData = ['by Enter', 'by click'] as const;
 
     for (const submitType of submitTypesData) {
-        test(`Submit log in form ${submitType}`, async ({homePage, page, baseURL}) => {
+        test(`Submit log in form ${submitType}`, async ({homePage, inventoryPage, page, baseURL}) => {
             const loginForm = homePage.LoginForm;
 
             expect(await loginForm.isVisible()).toBe(true);
@@ -27,6 +27,7 @@ test.describe('Home page', () => {
             await loginForm.submit(submitType);
 
             await expect.poll(() => page.url()).toStrictEqual(`${baseURL}${INVENTORY_PAGE}`);
+            expect(await inventoryPage.Header.SecondaryHeader.isVisibleTitle('Products')).toBe(true);
         });
     }
 
