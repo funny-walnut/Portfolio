@@ -5,7 +5,7 @@ export class ErrorMessage extends Component {
     private LOCATORS = {
         text: this.locator.locator('//h3'),
         xButton: this.locator.getByRole('button'),
-    }
+    };
 
     public async getText(): Promise<string> {
         return await getTextContent(this.LOCATORS.text);

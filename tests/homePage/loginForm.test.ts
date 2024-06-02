@@ -7,7 +7,7 @@ const LOCKED_OUT_USER_ERROR_MESSAGE = 'Epic sadface: Sorry, this user has been l
 const CANNOT_ACCESS_USER_ERROR_MESSAGE = 'Epic sadface: You can only access \'/inventory.html\' when you are logged in.';
 const FIELD_IS_REQUIRED = (fieldName: LoginFormPlaceholders) => `Epic sadface: ${fieldName} is required`;
 
-test.describe('login form testing', () => {
+test.describe('Home page', () => {
     test.beforeEach(async ({homePage}) => {
         await homePage.open()
     });
@@ -74,7 +74,7 @@ test.describe('login form testing', () => {
     ] as const;
 
     for (const {placeholder, value, requiredField} of data) {
-        test(`Fill only ${placeholder} field and click login button`, async ({homePage, page, baseURL}) => {
+        test(`Fill only ${placeholder} field and click login button`, async ({homePage}) => {
             const loginForm = homePage.LoginForm;
 
             await loginForm.fillInputByName(placeholder, value);
