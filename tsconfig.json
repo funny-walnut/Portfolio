@@ -6,6 +6,7 @@
       "@Components/*": ["src/components/*"],
       "@Constants/*": ["src/constants/*"],
       "@Test": ["src/customTest"],
+      "@Types": ["src/types"],
       "@Pages/*": ["src/pages/*"],
       "@Utils/*": ["src/utils/*"]
     },
