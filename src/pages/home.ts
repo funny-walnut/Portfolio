@@ -4,7 +4,7 @@ import {LoginFrom} from "@Components/home/loginFrom";
 export class HomePage extends Container {
     private LOCATORS = {
         loginForm: this.page.locator('//form')
-    }
+    };
 
     public LoginForm = new LoginFrom(this.LOCATORS.loginForm, this.page);
 

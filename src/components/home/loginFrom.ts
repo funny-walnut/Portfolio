@@ -11,21 +11,21 @@ export class LoginFrom extends Component {
         input: (placeholder: LoginFormPlaceholders) => this.locator.getByPlaceholder(placeholder),
         loginButton: this.locator.locator('//input[@value="Login"]'),
         errorMessageContainer: this.locator.locator('//div[h3]')
-    }
+    };
 
     public ErrorMessage = new ErrorMessage(this.LOCATORS.errorMessageContainer, this.page);
 
     private async clickLoginButton(): Promise<void> {
         await Promise.all([
             this.LOCATORS.loginButton.click(),
-            this.page.waitForLoadState('domcontentloaded')
+            this.page.waitForLoadState('networkidle')
         ])
     }
 
     private async pressEnterButton(): Promise<void> {
         await Promise.all([
             this.locator.press('Enter'),
-            this.page.waitForLoadState('load'),
+            this.page.waitForLoadState('networkidle'),
         ]);
     }
 
